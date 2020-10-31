@@ -1,5 +1,6 @@
 import streamlit as st
 from fastai.vision.all import *
+from utils import download_from_gdrive
 
 def load_learner_(path):
     return load_learner(path)
@@ -10,10 +11,12 @@ def load_img(path):
     dim = (500, int((h*500)/w))
     return image.resize(dim)
 
-learn = load_learner_('export.pkl')
-
 st.markdown("# PotHole_Image Classifier")
 st.markdown("Upload an image and the classifier will tell you whether its Perfect road Or Road with Pothole.")
+
+with st.spinner('Downloading model...'):
+    download_from_gdrive(file_id='1L7Q0swWYEpdDUw8T4ho0kto-1k5fkUZS',  dest_path='./export.pkl')
+learn = load_learner_('export.pkl')
 
 file_bytes = st.file_uploader("Upload a file", type=("png", "jpg", "jpeg", "jfif"))
 if file_bytes:
